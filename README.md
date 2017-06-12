@@ -5,6 +5,8 @@ iOS development with J2objc using the [Doppl build framework](http://doppl.co/).
 
 The current version is deployed for usage in the sample app. [See that for basic usage](https://github.com/doppllib/PartyClickerSample/tree/greendaoencrypted).
 
+This repo is new rather than a fork of the original [Android SQLCipher repo](https://github.com/sqlcipher/android-database-sqlcipher). The Android project in that repo has the "old style" folders.
+
 ## Versions
 
 [3.5.7](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/)
