@@ -17,6 +17,8 @@
 package net.sqlcipher;
 
 import android.database.CharArrayBuffer;
+import android.database.ContentObservable;
+import android.database.ContentObserver;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -34,7 +36,7 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
     private static final String TAG = "Cursor";
 
     DataSetObservable mDataSetObservable = new DataSetObservable();
-//    ContentObservable mContentObservable = new ContentObservable();
+    ContentObservable mContentObservable = new ContentObservable();
 
     private Bundle mExtras = Bundle.EMPTY;
 
@@ -71,11 +73,11 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
     public int getColumnCount() {
         return getColumnNames().length;
     }
-    
+
     public void deactivate() {
         deactivateInternal();
     }
-    
+
     /**
      * @hide
      */
@@ -86,10 +88,10 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
         }*/
         mDataSetObservable.notifyInvalidated();
     }
-    
+
     public boolean requery() {
         /*if (mSelfObserver != null && mSelfObserverRegistered == false) {
-        	
+
             mContentResolver.registerContentObserver(mNotifyUri, true, mSelfObserver);
             mSelfObserverRegistered = true;
         }*/
@@ -100,10 +102,10 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
     public boolean isClosed() {
         return mClosed;
     }
-    
+
     public void close() {
         mClosed = true;
-//        mContentObservable.unregisterAll();
+        mContentObservable.unregisterAll();
         deactivateInternal();
     }
 
@@ -137,7 +139,7 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
         return true;
     }
 
-    
+
     public void copyStringToBuffer(int columnIndex, CharArrayBuffer buffer) {
         // Default implementation, uses getString
         String result = getString(columnIndex);
@@ -153,7 +155,7 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
             buffer.sizeCopied = 0;
         }
     }
-    
+
     /* -------------------------------------------------------- */
     /* Implementation */
     public AbstractCursor() {
@@ -198,7 +200,7 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
 
         return result;
     }
-    
+
     /**
      * Copy data from cursor to CursorWindow
      * @param position start position of data
@@ -268,11 +270,11 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
             }
         }
 
-        /*if (Config.LOGV)*/ {
+        /*if (Config.LOGV) {
             if (getCount() > 0) {
                 Log.w("AbstractCursor", "Unknown column " + columnName);
             }
-        }
+        }*/
         return -1;
     }
 
@@ -362,7 +364,7 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
         }
 
         // Long.valueOf() returns null sometimes!
-//        Long rowid = Long.valueOf(getLong(mRowIdColumnIndex));
+        //        Long rowid = Long.valueOf(getLong(mRowIdColumnIndex));
         Long rowid = Long.valueOf(getLong(mRowIdColumnIndex));
         if (rowid == null) {
             throw new IllegalStateException("null rowid. mRowIdColumnIndex = " + mRowIdColumnIndex);
@@ -382,7 +384,7 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
 
     /**
      * Returns <code>true</code> if there are pending updates that have not yet been committed.
-     * 
+     *
      * @return <code>true</code> if there are pending updates that have not yet been committed.
      * @hide
      * @deprecated
@@ -419,6 +421,17 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
         return mRowIdColumnIndex != -1;
     }
 
+    public void registerContentObserver(ContentObserver observer) {
+        mContentObservable.registerObserver(observer);
+    }
+
+    public void unregisterContentObserver(ContentObserver observer) {
+        // cursor will unregister all observers when it close
+        if (!mClosed) {
+            mContentObservable.unregisterObserver(observer);
+        }
+    }
+
     /**
      * This is hidden until the data set change model has been re-evaluated.
      * @hide
@@ -426,18 +439,18 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
     protected void notifyDataSetChange() {
         mDataSetObservable.notifyChanged();
     }
-    
+
     /**
      * This is hidden until the data set change model has been re-evaluated.
      * @hide
      */
     protected DataSetObservable getDataSetObservable() {
         return mDataSetObservable;
-        
+
     }
     public void registerDataSetObserver(DataSetObserver observer) {
         mDataSetObservable.registerObserver(observer);
-        
+
     }
 
     public void unregisterDataSetObserver(DataSetObserver observer) {
@@ -452,17 +465,12 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
      */
     protected void onChange(boolean selfChange) {
         synchronized (mSelfObserverLock) {
-//            mContentObservable.dispatchChange(selfChange);
-//            if (mNotifyUri != null && selfChange) {
-//                mContentResolver.notifyChange(mNotifyUri, mSelfObserver);
-//            }
+            mContentObservable.dispatchChange(selfChange);
+            /*if (mNotifyUri != null && selfChange) {
+                mContentResolver.notifyChange(mNotifyUri, mSelfObserver);
+            }*/
         }
     }
-
-
-//    public Uri getNotificationUri() {
-//        return mNotifyUri;
-//    }
 
     public boolean getWantsAllOnMoveCalls() {
         return false;
@@ -533,8 +541,6 @@ public abstract class AbstractCursor implements android.database.CrossProcessCur
 //            mContentResolver.unregisterContentObserver(mSelfObserver);
 //        }
     }
-
-
 
     /**
      * This HashMap contains a mapping from Long rowIDs to another Map

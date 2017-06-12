@@ -10,6 +10,7 @@
 #import "AndroidContentIOSContext.h"
 #import "AndroidOsLooper.h"
 #import "CoTouchlabTestTestDb.h"
+#import "DopplRuntime.h"
 
 @interface AppDelegate ()
 
@@ -19,7 +20,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [AndroidOsLooper prepareMainLooper];
+    [DopplRuntime start];
     
     AndroidContentIOSContext* context = [[AndroidContentIOSContext alloc] init];
     [CoTouchlabTestTestDb testDbWithAndroidAppApplication:context];

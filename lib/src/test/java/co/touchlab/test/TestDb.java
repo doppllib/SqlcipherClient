@@ -17,10 +17,12 @@ public class TestDb
     {
         SQLiteDatabase.nativeInit();
         File databaseFile = application.getDatabasePath("demo.db");
-//        databaseFile.mkdirs();
-//        databaseFile.delete();
+        databaseFile.mkdirs();
+        databaseFile.delete();
+
+
         SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "test123", null);
-//        database.execSQL("create table t1(a, b)");
+        database.execSQL("create table t1(a, b)");
         database.execSQL("insert into t1(a, b) values(?, ?)", new Object[]{"asdf",
                 "qwert"});
 
@@ -32,5 +34,8 @@ public class TestDb
             cursor.moveToNext();
         }
         cursor.close();
+
+
+        //Hellos, a thing
     }
 }
