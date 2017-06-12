@@ -1,0 +1,4 @@
+Moved all stuff to jni. Remember extern "C" issue. All the jni stuff seems to call, but when running we simply
+don't get a db instance back. Need to debug that.
+
+Need to call JNI_OnLoad!!!

@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'co.doppl.gradle'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+def javaCoreVersion = '0.7.4'
+def dopplCoreVersion = '0.7.4.0'
+
+dependencies {
+
+    provided "co.doppl.lib:androidbase:$javaCoreVersion"
+    doppl "co.doppl.lib:androidbase:$dopplCoreVersion"
+}
+
+group = 'co.doppl.net.zetetic'
+version = '3.5.7.0'
+
+ext.bintrayGitUrl = 'https://github.com/doppllib/SqlcipherClient.git'
+
+apply from: "$dopplSharedScriptHome/doppllibpublish.gradle"
+apply from: "$dopplSharedScriptHome/bintray.gradle"
+
+test{
+    enabled = false
+}
+
+dopplConfig {
+
+    copyMainOutput "../iostest/dopplframework/main"
+    copyTestOutput "../iostest/dopplframework/test"
+    copyDependencies true
+
+}
