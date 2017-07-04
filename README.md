@@ -16,7 +16,7 @@ This repo is new rather than a fork of the original [Android SQLCipher repo](htt
 ```groovy
 dependencies {
     compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
-    doppl 'co.doppl.net.zetetic:android-database-sqlcipher:3.5.7.0'
+    doppl 'co.doppl.net.zetetic:android-database-sqlcipher:3.5.7.1'
 }
 ```
 
@@ -34,4 +34,3 @@ See [docs](http://doppl.co/docs/createlibrary.html) for an overview of our setup
 *** License
 
 The Android support libraries are licensed under Apache 2.0, in line with the Android OS code on which they are based. The SQLCipher code itself is licensed under a BSD-style license from Zetetic LLC. Finally, the original SQLite code itself is in the public domain.
-g

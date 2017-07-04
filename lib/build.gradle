@@ -5,19 +5,20 @@ apply plugin: 'maven-publish'
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
-def javaCoreVersion = '0.7.4'
-def dopplCoreVersion = '0.7.4.0'
+def javaCoreVersion = '0.8.0'
+def dopplCoreVersion = '0.8.0.0'
 
 dependencies {
 
-    provided "co.doppl.lib:androidbase:$javaCoreVersion"
+    compileOnly "co.doppl.lib:androidbase:$javaCoreVersion"
     doppl "co.doppl.lib:androidbase:$dopplCoreVersion"
 }
 
 group = 'co.doppl.net.zetetic'
-version = '3.5.7.0'
+version = '3.5.7.1'
 
 ext.bintrayGitUrl = 'https://github.com/doppllib/SqlcipherClient.git'
+ext.artifactId = "android-database-sqlcipher"
 
 apply from: "$dopplSharedScriptHome/doppllibpublish.gradle"
 apply from: "$dopplSharedScriptHome/bintray.gradle"
